@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from fastapi import FastAPI, Query, Request as FastAPIRequest
@@ -24,12 +24,22 @@ async def _vercel_set_headers(request: FastAPIRequest, call_next):
 
 class Request(BaseModel):
     messages: List[ClientMessage]
+    systemPrompt: Optional[str] = None
 
 
 @app.post("/api/chat")
 async def handle_chat_data(request: Request, protocol: str = Query('data')):
     messages = request.messages
     openai_messages = convert_to_openai_messages(messages)
+    
+    # Add system prompt at the beginning if provided
+    if request.systemPrompt:
+        from openai.types.chat.chat_completion_message_param import ChatCompletionMessageParam
+        system_message: ChatCompletionMessageParam = {
+            "role": "system",
+            "content": request.systemPrompt
+        }
+        openai_messages.insert(0, system_message)
 
     client = OpenAI(api_key=oidc.get_vercel_oidc_token(), base_url="https://ai-gateway.vercel.sh/v1")
     response = StreamingResponse(
