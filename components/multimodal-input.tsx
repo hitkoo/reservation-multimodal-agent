@@ -1,6 +1,11 @@
 "use client";
 
-import type { CreateUIMessage, UIMessage, UseChatHelpers, UseChatOptions } from "@ai-sdk/react";
+import type {
+  CreateUIMessage,
+  UIMessage,
+  UseChatHelpers,
+  UseChatOptions,
+} from "@ai-sdk/react";
 
 type ChatRequestOptions = {
   headers?: Record<string, string> | Headers;
@@ -57,7 +62,7 @@ export function MultimodalInput({
   stop: () => void;
   messages: Array<UIMessage>;
   setMessages: Dispatch<SetStateAction<Array<UIMessage>>>;
-  sendMessage: UseChatHelpers<UIMessage>['sendMessage']
+  sendMessage: UseChatHelpers<UIMessage>["sendMessage"];
   handleSubmit: (
     event?: {
       preventDefault?: () => void;
@@ -121,7 +126,7 @@ export function MultimodalInput({
 
   return (
     <div className="relative w-full flex flex-col gap-4">
-      {messages.length === 0 && (
+      {/* {messages.length === 0 && (
         <div className="grid sm:grid-cols-2 gap-2 w-full">
           {suggestedActions.map((suggestedAction, index) => (
             <motion.div
@@ -155,7 +160,7 @@ export function MultimodalInput({
             </motion.div>
           ))}
         </div>
-      )}
+      )} */}
 
       <Textarea
         ref={textareaRef}
